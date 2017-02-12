@@ -1,0 +1,6 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/
+
+caffe/snapshot/
+caffe/fer2013/
+!caffe/fer2013/*.py
