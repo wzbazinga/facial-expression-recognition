@@ -7,12 +7,9 @@ layer{
     include{
         phase:TRAIN
     }
-    transform_param{
-        scale: 1.0
-    }
     data_param{
-        source: "fer2013/fer_test_lmdb"
-        batch_size:287
+        source: "fer2013/fer_train_lmdb"
+        batch_size:20
         backend:LMDB
     }
 }
@@ -25,12 +22,9 @@ layer{
     include{
         phase:TEST
     }
-    transform_param{
-        scale: 1.0
-    }
     data_param{
         source: "fer2013/fer_validate_lmdb"
-        batch_size:35
+        batch_size:5
         backend:LMDB
     }
 }
@@ -130,9 +124,9 @@ layer{
 }
 
 layer{
-    name: "relu1"
-    type: "ReLU"
-    bottom: "ip1"
+    name:"relu"
+    type:"TanH"
+    bottom:"ip1"
     top:"ip1"
 }
 
