@@ -4,3 +4,5 @@
 caffe/snapshot/
 caffe/fer2013/
 !caffe/fer2013/*.py
+caffe/fer2013+
+!caffe/fer2013+/*.py
