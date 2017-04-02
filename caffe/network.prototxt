@@ -8,12 +8,14 @@ layer{
         phase:TRAIN
     }
     data_param{
-        source: "fer2013/train"
+        source: "fer2013+/train"
         batch_size:64
         backend:LMDB
     }
     transform_param{
         scale:0.00390625
+        mean_file_size: fer2013+/train.binaryproto
+        mirror: 1
     }
 }
 
@@ -26,12 +28,13 @@ layer{
         phase:TEST
     }
     data_param{
-        source: "fer2013/validate"
+        source: "fer2013+/validate"
         batch_size:16
         backend:LMDB
     }
     transform_param{
         scale:0.00390625
+        mean_file_size: fer2013+/train.binaryproto
     }
 }
 
