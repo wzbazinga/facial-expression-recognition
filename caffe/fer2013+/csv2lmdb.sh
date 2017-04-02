@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env bash
 rm -rf pic
 mkdir pic
 rm train.txt validate.txt test.txt
-python csv2img.py
+python csv2img\&aug.py
 
 rm -rf train validate test
 convert_imageset --shuffle --check_size --gray ./ train.txt train
