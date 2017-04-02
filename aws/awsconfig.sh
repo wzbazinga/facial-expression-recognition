@@ -14,6 +14,7 @@ sudo chmod a+w /etc/allowed_users
 sudo echo ubuntu >> /etc/allowed_users
 sudo service vsftpd restart
 
+sudo pip install imutils
 sudo pip install pyDrive
 
 # prepare work dir
