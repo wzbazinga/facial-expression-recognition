@@ -17,3 +17,6 @@ rm train.npy
 python bin2npy.py train.binaryproto train.npy
 #python bin2npy.py validate.binaryproto validate.npy
 #python bin2npy.py test.binaryproto test.npy
+
+cd ..
+caffe train -solver solver.prototxt
