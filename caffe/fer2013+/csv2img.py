@@ -3,7 +3,7 @@
 # emotion neutral happy surprise sadness anger disgust fear contempt unknown NF
 # fer+     0       1       2        3      4      5     6      7       8     9
 # fer      6       3       5        4      0      1     2
-
+#https://github.com/opencv/opencv/blob/master/data/lbpcascades/lbpcascade_profileface.xml
 import csv
 import numpy as np
 import cv2
@@ -13,36 +13,61 @@ fermap = {6: 0, 3: 1, 5: 2, 4: 3, 0: 4, 1: 5, 2: 6}
 all = 0
 all1 = 0
 all2 = 0
-SIZE = 48
 diff = 0
+
+SIZE = 48
+A = ((144 / 2) - (SIZE / 2))
+B = ((144 / 2) + (SIZE / 2))
 
 ftrain = open('train.txt', 'w')
 fvalidate = open('validate.txt', 'w')
 ftest = open('test.txt', 'w')
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+profile_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+lbp_cascade=cv2.CascadeClassifier('lbpcascade_profileface.xml')
 
-def outputOne(img, label, type):
+t=0
+def outputOne(img, label, type, degree):
     global face_cascade
+    global profile_cascade
     global all
     global all1
+    global t
     all1 += 1
-    gray_border = np.zeros((150, 150), np.uint8)
-    gray_border[:, :] = 170
-    gray_border[((150 / 2) - (SIZE / 2)):((150 / 2) + (SIZE / 2)),
-    ((150 / 2) - (SIZE / 2)):((150 / 2) + (SIZE / 2))] = img
 
-    faces = face_cascade.detectMultiScale(gray_border, 1.025, 6)
-    if len(faces) != 1:
+    img = imutils.rotate(img, degree)
+
+    faces = face_cascade.detectMultiScale(img[A:B, A:B], 1.025, 6)
+    if len(faces) == 0:
+        #cv2.imshow('noface', img)
+        #cv2.waitKey(100)
         return
+        #faces=lbp_cascade.detectMultiScale(img[A - PAD:B + PAD, A - PAD:B + PAD], 1.025, 6)
+        #if len(faces)==0:
+            #cv2.imshow('noface',img)
+            #cv2.waitKey(50)
+            #t+=1
+    #return
+    #faces = profile_cascade.detectMultiScale(img[A - PAD:B + PAD, A - PAD:B + PAD], 1.025, 6)
+    #if len(faces) != 0:
+    #    cv2.imshow('profile',img)
+    #    cv2.waitKey(100)
+    #return
 
     x, y, w, h = faces[0]
-    # cv2.rectangle(gray_border, (x, y), (x + w, y + h), (255, 0, 0), 2)
-    roi = gray_border[y:y + w, x:x + h]
+    x = x + SIZE
+    y = y + SIZE
+    #cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+    #cv2.imshow('profile', img)
+    #cv2.waitKey(50)
+    #return
+    roi = img[y:y + w, x:x + h]
     roi = cv2.resize(roi, (SIZE, SIZE))
     # print x, y, w, h
-    # cv2.imshow('face', gray_border)
-    # cv2.waitKey()
+    #cv2.imshow('face', roi)
+    #cv2.waitKey(100)
+    #return
 
     name = 'pic/%d.png' % all
     cv2.imwrite(name, roi)
@@ -84,29 +109,21 @@ def main():
 
         # 直方图均衡化，效果不明显
         # data = cv2.equalizeHist(data)
-        outputOne(data, l1, i[0])
-
         # continue
+
+        gray_border = np.zeros((144, 144), np.uint8)
+        gray_border[:, :] = 170
+        cv2.repeat(data, 3, 3, gray_border)
+
         if i[0] != 'Training':
+            outputOne(gray_border, l1, i[0], 0)
             continue
-        data1 = imutils.rotate(data, 5)
-        outputOne(data1, l1, i[0])
-        data1 = imutils.rotate(data, 10)
-        outputOne(data1, l1, i[0])
-        data1 = imutils.rotate(data, 15)
-        outputOne(data1, l1, i[0])
-        data1 = imutils.rotate(data, 20)
-        outputOne(data1, l1, i[0])
 
-        data1 = imutils.rotate(data, 365 - 5)
-        outputOne(data1, l1, i[0])
-        data1 = imutils.rotate(data, 365 - 10)
-        outputOne(data1, l1, i[0])
-        data1 = imutils.rotate(data, 365 - 15)
-        outputOne(data1, l1, i[0])
-        data1 = imutils.rotate(data, 365 - 20)
-        outputOne(data1, l1, i[0])
-
+        D = range(0, 21, 5)
+        D.extend(range(345, 361, 5))
+        for d in D:
+            outputOne(gray_border, l1, i[0], d)
+    print 't',t
     print 'different:', diff
 
     fernew.close()
