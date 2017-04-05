@@ -1,7 +1,7 @@
 # The train/test net protocol buffer definition
 net: "network.prototxt"
 # passes of one test
-test_iter: 200
+test_iter: 100
 # Carry out testing for every test_interval training iterations.
 test_interval:500
 # learning policy
@@ -28,4 +28,4 @@ display: 100
 snapshot: 5000
 snapshot_prefix: "snapshot/fer"
 # solver_mode: CPU or GPU
-solver_mode: CPU
+solver_mode: GPU

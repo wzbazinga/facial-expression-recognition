@@ -1,40 +1,17 @@
 name: "ferNet"
-layer{
-    name:"fer" 
-    type:"Data"
-    top:"data"
-    top:"label"
-    include{
-        phase:TRAIN
-    }
-    data_param{
-        source: "fer2013+/train"
-        batch_size:64
-        backend:LMDB
-    }
-    transform_param{
-        scale:0.00390625
-        mean_file: "fer2013+/train.binaryproto"
-        mirror: 1
-    }
-}
 
 layer{
-    name:"fer"
-    type:"Data"
+    name:"data"
+    type:"Input"
     top:"data"
     top:"label"
-    include{
-        phase:TEST
-    }
-    data_param{
-        source: "fer2013+/validate"
-        batch_size:28
-        backend:LMDB
-    }
-    transform_param{
-        scale:0.00390625
-        mean_file: "fer2013+/train.binaryproto"
+    input_param{
+        shape:{
+            dim:1
+            dim:1
+            dim:48
+            dim:48
+        }
     }
 }
 
@@ -83,7 +60,7 @@ layer{
     top: "conv2"
     param{
         lr_mult:1
-    }  
+    }
     param{
         lr_mult:2
     }
@@ -317,20 +294,8 @@ layer{
 }
 
 layer{
-    name: "accuracy"
-    type: "Accuracy"
+    name: "prob"
+    type: "Softmax"
     bottom: "ip3"
-    bottom: "label"
-    top: "accuracy"
-    include {
-        phase:TEST
-    }
-}
-
-layer{
-    name: "loss"
-    type: "SoftmaxWithLoss"
-    bottom: "ip3"
-    bottom: "label"
-    top: "loss"
+    top: "prob"
 }
