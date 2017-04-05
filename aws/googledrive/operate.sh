@@ -1,3 +1,4 @@
+# this script prepare training data and start training process automatically
 python downloadData.py
 mv fer2013+.tar.gz ../
 cd ..

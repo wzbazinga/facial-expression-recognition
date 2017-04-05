@@ -1,6 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea/
 
+aws/googledrive/credentials.json
 caffe/snapshot/
 
 caffe/fer2013/*
@@ -9,3 +10,5 @@ caffe/fer2013/*
 caffe/fer2013+/*
 !caffe/fer2013+/*.py
 !caffe/fer2013+/*.sh
+
+test/
