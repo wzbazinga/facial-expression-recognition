@@ -12,7 +12,7 @@ mean_file = 'fer2013+/train.npy'
 
 class Classfier:
     def __init__(self):
-        self.emomap = {0: 'neutral', 1: 'happy', 2: 'surpirse', 3: 'sadness', 4: 'anger', 5: 'disgust', 6: 'fear'}
+        self.emomap = {0: 'neutral', 1: 'happy', 2: 'surprise', 3: 'sadness', 4: 'anger', 5: 'disgust', 6: 'fear'}
         self.face_cascade = cv2.CascadeClassifier('fer2013+/haarcascade_frontalface_default.xml')
         self.mu = np.load(mean_file)
         self.mu.resize((SIZE, SIZE))
@@ -31,7 +31,7 @@ class Classfier:
             grayimg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         else:
             grayimg = cv2.imdecode(img, cv2.IMREAD_GRAYSCALE)
-        faces = self.face_cascade.detectMultiScale(grayimg, 1.3, 6)
+        faces = self.face_cascade.detectMultiScale(grayimg, 1.2, 6)
         labels = []
         for face in faces:
             x, y, w, h = face
@@ -62,7 +62,7 @@ class Classfier:
             ret, frame = self.video_capture.read()
             faces, labels = self.detect(frame)
             self.drawEmotions(frame, faces, labels)
-            cv2.waitKey(20)
+            cv2.waitKey(10)
 
     def detectOne(self, imgname='e.jpg'):
         im = cv2.imread(imgname)
@@ -87,8 +87,8 @@ def saveface(imgname='e.jpg'):
 
 def main():
     classfier = Classfier()
-    # classfier.loop()
-    classfier.detectOne('i.jpg')
+    #classfier.loop()
+    classfier.detectOne('e.jpg')
     # saveface()
 
 

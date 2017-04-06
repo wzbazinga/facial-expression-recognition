@@ -2,6 +2,7 @@
 .idea/
 
 aws/googledrive/credentials.json
+aws/googledrive/client_secrets.json
 caffe/snapshot/
 
 caffe/fer2013/*
@@ -10,5 +11,6 @@ caffe/fer2013/*
 caffe/fer2013+/*
 !caffe/fer2013+/*.py
 !caffe/fer2013+/*.sh
+caffe/e.jpg
 
 test/
