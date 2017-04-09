@@ -87,8 +87,8 @@ def saveface(imgname='e.jpg'):
 
 def main():
     classfier = Classfier()
-    #classfier.loop()
-    classfier.detectOne('e.jpg')
+    classfier.loop()
+    # classfier.detectOne('e.jpg')
     # saveface()
 
 
