@@ -1,14 +1,17 @@
 # get training images
 rm -rf pic
 mkdir pic
-rm train.txt validate.txt test.txt
+rm train.txt validate.txt test.txt tv.txt total.txt
+rm -rf train_labels validate_labels test_labels tv_labels total_labels
 python csv2img.py
 
 # convert images to lmdb
-rm -rf train validate test
-convert_imageset --shuffle --check_size --gray ./ train.txt train
-convert_imageset --shuffle --check_size --gray ./ validate.txt validate
-convert_imageset --shuffle --check_size --gray ./ test.txt test
+rm -rf train validate test tv total
+convert_imageset --check_size --gray ./ train.txt train
+convert_imageset --check_size --gray ./ validate.txt validate
+convert_imageset --check_size --gray ./ test.txt test
+convert_imageset --check_size --gray ./ tv.txt tv
+convert_imageset --check_size --gray ./ total.txt total
 
 # compute the mean value of each pixel
 rm train.binaryproto
@@ -24,4 +27,4 @@ python bin2npy.py train.binaryproto train.npy
 
 # start caffe training process
 cd ..
-caffe train -solver solver.prototxt
+caffe train -solver multi_label_solver.prototxt

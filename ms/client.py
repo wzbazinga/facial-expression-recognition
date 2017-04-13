@@ -12,13 +12,14 @@
 import requests, re
 import sys, ast, time
 
+ip = '54.202.77.7'
+
 
 def getEmo(img):
     url = 'https://www.microsoft.com/cognitive-services/en-us/emotion-api'
     upurl = 'https://www.microsoft.com/cognitive-services/Demo/EmotionDemo/RecognizeEmotion'
     session = requests.Session()
     r1 = session.get(url)
-    time.sleep(1)
     html = r1.content
     remod = re.compile("antiForgeryToken = '(.*?)'")
     result = remod.findall(html)
@@ -29,7 +30,6 @@ def getEmo(img):
                                'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
                                'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36',
                                'origin': 'https: // www.microsoft.com'})
-    time.sleep(1)
     try:
         ret = ast.literal_eval(r2.json())
         return ret
@@ -38,9 +38,10 @@ def getEmo(img):
 
 
 def main():
-    for i in xrange(3000):
+    i = 0
+    while i < 3000:
         try:
-            r = requests.get('http://54.212.217.139:3000/next')
+            r = requests.get('http://%s:3000/next' % ip)
             res = r.json()
             v = res['err']
             if v == -1:
@@ -58,10 +59,12 @@ def main():
             else:
                 result['haveface'] = True
                 result['json'] = ret
-            r=requests.post('http://54.212.217.139:3000/put', json={'id': id, 'result': result})
+            r = requests.post('http://%s:3000/put' % ip, json={'id': id, 'result': result, 'client': i})
             print r.content
-        except Exception,e:
+        except Exception, e:
             print e
+        else:
+            i += 1
 
 
 if __name__ == '__main__':

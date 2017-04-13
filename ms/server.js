@@ -1,9 +1,11 @@
+//wget -qO- https://raw.github.com/creationix/nvm/v0.4.0/install.sh | sh
 var express = require('express');
 var mongoose = require('mongoose');
-var bodyParser=require('body-parser');
+var bodyParser = require('body-parser');
 
 var MAX = 1000000;
 var counter = 0;
+var clients = {};
 mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost:27017/test");
 var ImageListSchema = mongoose.Schema({
@@ -39,6 +41,7 @@ app.use('/next', function (req, res) {
 
 app.post('/put', function (req, res) {
     var obj = req.body;
+    clients[req.ip] = obj['client'];
     ImageList.findOneAndUpdate({'id': obj['id']}, {'$set': {'result': obj['result'], 'state': 1}}, function (err, ret) {
         if (err)
             res.send({'err': -1});
@@ -47,10 +50,15 @@ app.post('/put', function (req, res) {
     });
 });
 
-app.use('/query',function(req,res){
-    res.send({'counter':counter});
+app.use('/set/:counter', function (req, res) {
+    counter = Number(req.params.counter);
+    res.send({'counter': counter});
 });
 
+app.use('/query', function (req, res) {
+    res.send({'counter': counter, 'clients': clients});
+    clients = {};
+});
 
 app.listen('3000', function () {
     console.log('listening');

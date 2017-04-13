@@ -17,6 +17,7 @@ class Classfier:
         self.mu = np.load(mean_file)
         self.mu.resize((SIZE, SIZE))
         self.net = caffe.Net(deploy, model, caffe.TEST)
+        print self.net.blobs['conv1']
         self.video_capture = cv2.VideoCapture(0)
         cv2.namedWindow('emotion detector')
 
@@ -87,8 +88,8 @@ def saveface(imgname='e.jpg'):
 
 def main():
     classfier = Classfier()
-    classfier.loop()
-    # classfier.detectOne('e.jpg')
+    # classfier.loop()
+    classfier.detectOne('f.jpg')
     # saveface()
 
 
